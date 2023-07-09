@@ -91,10 +91,10 @@ Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: "Deaths" };
 const props = ["Kills", "Deaths", "Scores", "KD"];
 Teams.OnRequestJoinTeam.Add(function(player,team){
 	for (indx in props) {
-        	player.Properties.Get(props[indx]).Value = Properties.GetContext().Get(props[indx] + player.Id).Value || 0;
+        player.Properties.Get(props[indx]).Value = Properties.GetContext().Get(props[indx] + player.Id).Value || 0;
 		Properties.GetContext().Get(props[indx] + player.Id).Value = null;
-		saved_id.replace(player.Id + "/", "");
-    	}
+		saved_id.Value.replace(player.Id + "/", "");
+    }
 	team.Add(player);
 });
 // ñïàâí ïî âõîäó â êîìàíäó
@@ -103,7 +103,7 @@ Teams.OnPlayerChangeTeam.Add(function(player){ player.Spawns.Spawn()});
 Players.OnPlayerDisconnected.Add(function(player) {
     for (indx in props) {
         Properties.GetContext().Get(props[indx] + player.Id).Value = player.Properties.Get(props[indx]).Value;
-	saved_id.Value += player.Id + "/";
+	    saved_id.Value += player.Id + "/";
     }
 });
 
@@ -224,12 +224,6 @@ function SetGameMode()
 }
 function SetEndOfMatchMode() {
     try {
-        let saved_id_arr = saved_id.Value.split("/");
-        for (indx in saved_id_arr) {
-            for (i in props) {
-                Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
-            }
-        }
         let e = Players.GetEnumerator();
         let top1_kills, top1_kd, top1_scores;
         function CalculateBest(_value) {

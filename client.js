@@ -179,9 +179,9 @@ function CalculateBest(name, enm) {
     let cur_id = "";
     let cur_value = 0;
     while (enm.moveNext()) {
-        if (enm.Current.Properties.Get(name).Value > cur_value) {
+        if (Properties.GetContext(enm.Current).Get(name).Value > cur_value) {
             cur_id = enm.Current.Id;
-            cur_value = enm.Current.Properties.Get(name).Value;
+            cur_value = Properties.GetContext(enm.Current).Get(name).Value;
         }
     }
     return {name: Players.Get(cur_id).NickName, score: cur_value};

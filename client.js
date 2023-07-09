@@ -137,14 +137,14 @@ Spawns.OnSpawn.Add(function(player) {
 // ñ÷åò÷èê ñìåðòåé
 Damage.OnDeath.Add(function(player) {
 	++player.Properties.Deaths.Value;
-  player.Properties.Get("KD").Value = player.Properties.Deaths.Value > 0 ? Math.round(player.Properties.Kills.Value / player.Properties.Deaths.Value * 100) / 100 : player.Properties.Kills.Value;
+  	player.Properties.Get("KD").Value = player.Properties.Deaths.Value > 0 ? Math.round(player.Properties.Kills.Value / player.Properties.Deaths.Value * 100) / 100 : player.Properties.Kills.Value;
 });
 // ñ÷åò÷èê óáèéñòâ
 Damage.OnKill.Add(function(player, killed) {
 	if (killed.Team != null && killed.Team != player.Team) {
         player.Properties.Get("combo").Value += 1;
-		++player.Properties.Kills.Value;
-		player.Properties.Get("KD").Value = player.Properties.Deaths.Value > 0 ? Math.round(player.Properties.Kills.Value / player.Properties.Deaths.Value * 100) / 100 : player.Properties.Kills.Value;
+	++player.Properties.Kills.Value;
+	player.Properties.Get("KD").Value = player.Properties.Deaths.Value > 0 ? Math.round(player.Properties.Kills.Value / player.Properties.Deaths.Value * 100) / 100 : player.Properties.Kills.Value;
         player.Properties.Scores.Value += 100 * player.Properties.Get("combo").Value;
         player.Timers.Get("combo").Restart(4);
 	}

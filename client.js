@@ -2,7 +2,7 @@
 //var System = importNamespace('System');
 
 // êîíñòàíòû
-var WaitingPlayersTime = 10;
+var WaitingPlayersTime = 2;
 var BuildBaseTime = 2;
 var GameModeTime = 2;
 var EndOfMatchTime = 20;
@@ -233,14 +233,16 @@ function SetEndOfMatchMode() {
 
         let top1_kills = Properties.GetContext().Get("top1_kills"), top1_kd = Properties.GetContext().Get("top1_kd"), top1_scores = Properties.GetContext().Get("top1_scores");
         function CalculateBest(_value) {
-            let cur_best_id = "", cur_best_value = 0, e = Players.GetEnumerator();
-            while (e.moveNext()) {
-                if (e.Current.Properties.Get(_value).Value > cur_best_value) {
-                    cur_best_id = e.Current.Id;
-                    cur_best_value = e.Current.Properties.Get(_value).Value;
+            try {
+                let cur_best_id = "", cur_best_value = 0, e = Players.GetEnumerator();
+                while (e.moveNext()) {
+                    if (e.Current.Properties.Get(_value).Value > cur_best_value) {
+                        cur_best_id = e.Current.Id;
+                        cur_best_value = e.Current.Properties.Get(_value).Value;
+                    }
                 }
-            }
-            return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id).NickName };
+                return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id).NickName };
+            } catch (e) { msg.Show(e.name + " " + e.message); }
         }
 
         top1_kills.Value = CalculateBest("Kills");

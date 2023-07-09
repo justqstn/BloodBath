@@ -241,7 +241,7 @@ function SetEndOfMatchMode() {
                         cur_best_value = e.Current.Properties.Get(_value).Value;
                     }
                 }
-                return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id).NickName };
+                return { id: cur_best_id, val: cur_best_value, nick: Players.Get(cur_best_id).NickName };
             } catch (e) { msg.Show(e.name + " " + e.message); }
         }
 
@@ -249,7 +249,7 @@ function SetEndOfMatchMode() {
         top1_kd = CalculateBest("KD");
         top1_scores = CalculateBest("Scores");
 
-        msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.value + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.value + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.value);
+        msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nick + "\n<i>Счет: " + top1_kills.val + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nick + "\n<i>Счет: " + top1_kd.val + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nick + "\n<i>Счет: " + top1_scores.val);
 
         stateProp.Value = EndOfMatchStateValue;
         Ui.GetContext().Hint.Value = "Hint/EndOfMatch";

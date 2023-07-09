@@ -225,7 +225,7 @@ function SetGameMode()
 function SetEndOfMatchMode() {
 	let saved_id_arr = saved_id.split("/");
 	for (indx in saved_id_arr) {
-		for (i in props)
+		for (i in props) {
 			Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
 		}
 	}
@@ -239,8 +239,8 @@ function SetEndOfMatchMode() {
 				cur_best_value = e.Current.Properties.Get(_value).Value;
 			}
 		}
-		return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id) }
-	}
+		return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id) };
+    }
 
 	top1_kills.Value = CalculateBest("Kills");
 	top1_kd.Value = CalculateBest("KD");

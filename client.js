@@ -4,7 +4,7 @@
 // êîíñòàíòû
 var WaitingPlayersTime = 10;
 var BuildBaseTime = 30;
-var GameModeTime = 600;
+var GameModeTime = 60;
 var EndOfMatchTime = 20;
 
 // êîíñòàíòû èìåí

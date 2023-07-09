@@ -17,7 +17,7 @@ var EndOfMatchStateValue = "EndOfMatch";
 var mainTimer = Timers.GetContext().Get("Main");
 var stateProp = Properties.GetContext().Get("State");
 let saved_id = Properties.GetContext().Get("saved");
-saved_id = "";
+saved_id.Value = "";
 
 // ïðèìåíÿåì ïàðàìåòðû ñîçäàíèÿ êîìíàòû
 Damage.FriendlyFire = GameMode.Parameters.GetBool("FriendlyFire");

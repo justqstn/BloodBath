@@ -231,8 +231,7 @@ function SetGameMode()
 		inventory.Explosive.Value = true;
 		inventory.Build.Value = true;
 	}
-	msg.Show(JSON.stringify(new CalculateBest("Kills")));
-	
+
 	mainTimer.Restart(GameModeTime);
 	Spawns.GetContext().Despawn();
 	SpawnTeams();
@@ -246,9 +245,11 @@ function SetEndOfMatchMode() {
             }
         }
 
-        msg.Show(JSON.stringify(new CalculateBest("Kills")));
+		let top1_kills = new CalculateBest("Kills");
+		let top1_kd = new CalculateBest("KD");
+		let top1_scores = new CalculateBest("Scores")
 
-        //msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nick + "\n<i>Счет: " + top1_kills.val + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nick + "\n<i>Счет: " + top1_kd.val + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nick + "\n<i>Счет: " + top1_scores.val);
+        msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.score + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.score + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.score);
 
         stateProp.Value = EndOfMatchStateValue;
         Ui.GetContext().Hint.Value = "Hint/EndOfMatch";

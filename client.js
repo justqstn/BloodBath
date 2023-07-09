@@ -37,8 +37,6 @@ Teams.Add("Blue", "<i><B><size=38>С</size><size=30>иние</size></B>\nкро�
 Teams.Add("Red", "<i><B><size=38>К</size><size=30>расные</size></B>\nкровавая баня</i>", { r: 0.75 });
 var blueTeam = Teams.Get("Blue");
 var redTeam = Teams.Get("Red");
-blueTeam.Spawns.SpawnPointsGroups.Add(1);
-redTeam.Spawns.SpawnPointsGroups.Add(2);
 blueTeam.Build.BlocksSet.Value = BuildBlocksSet.Blue;
 redTeam.Build.BlocksSet.Value = BuildBlocksSet.Red;
 
@@ -177,6 +175,8 @@ SetWaitingMode();
 
 // ñîñòîÿíèÿ èãðû
 function SetWaitingMode() {
+	blueTeam.Spawns.SpawnPointsGroups.Add(1);
+	redTeam.Spawns.SpawnPointsGroups.Add(2);
 	stateProp.Value = WaitingStateValue;
 	Ui.GetContext().Hint.Value = "Hint/WaitingPlayers";
 	Spawns.GetContext().enable = false;

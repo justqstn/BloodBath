@@ -5,7 +5,7 @@
 var WaitingPlayersTime = 10;
 var BuildBaseTime = 30;
 var GameModeTime = 600;
-var EndOfMatchTime = 10;
+var EndOfMatchTime = 20;
 
 // êîíñòàíòû èìåí
 var WaitingStateValue = "Waiting";
@@ -16,6 +16,8 @@ var EndOfMatchStateValue = "EndOfMatch";
 // ïîñòîÿííûå ïåðåìåííûå
 var mainTimer = Timers.GetContext().Get("Main");
 var stateProp = Properties.GetContext().Get("State");
+let saved_id = Properties.GetContext().Get("saved");
+saved_id = "";
 
 // ïðèìåíÿåì ïàðàìåòðû ñîçäàíèÿ êîìíàòû
 Damage.FriendlyFire = GameMode.Parameters.GetBool("FriendlyFire");
@@ -86,20 +88,22 @@ Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: "Deaths" };
 Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: "Deaths" };
 
 // ðàçðåøàåì âõîä â êîìàíäû ïî çàïðîñó
-Teams.OnRequestJoinTeam.Add(function(player,team){team.Add(player);});
+const props = ["Kills", "Deaths", "Scores", "KD"];
+Teams.OnRequestJoinTeam.Add(function(player,team){
+	for (indx in props) {
+        	player.Properties.Get(props[indx]).Value = Properties.GetContext().Get(props[indx] + player.Id).Value || 0;
+		Properties.GetContext().Get(props[indx] + player.Id).Value = null;
+		saved_id.replace(player.Id + "/", "");
+    	}
+	team.Add(player);
+});
 // ñïàâí ïî âõîäó â êîìàíäó
 Teams.OnPlayerChangeTeam.Add(function(player){ player.Spawns.Spawn()});
-
-const props = ["Kills", "Deaths", "Scores", "KD"];
-Players.OnPlayerConnected.Add(function(player) {
-    for (indx in props) {
-        player.Properties.Get(props[indx]).Value = Properties.GetContext().Get(props[indx] + player.Id).Value;
-    }
-});
 
 Players.OnPlayerDisconnected.Add(function(player) {
     for (indx in props) {
         Properties.GetContext().Get(props[indx] + player.Id).Value = player.Properties.Get(props[indx]).Value;
+	saved_id.Value += player.Id + "/";
     }
 });
 
@@ -141,12 +145,12 @@ Damage.OnDeath.Add(function(player) {
 });
 // ñ÷åò÷èê óáèéñòâ
 Damage.OnKill.Add(function(player, killed) {
-	if (killed.Team != null && killed.Team != player.Team) {
-        player.Properties.Get("combo").Value += 1;
-	++player.Properties.Kills.Value;
-	player.Properties.Get("KD").Value = player.Properties.Deaths.Value > 0 ? Math.round(player.Properties.Kills.Value / player.Properties.Deaths.Value * 100) / 100 : player.Properties.Kills.Value;
-        player.Properties.Scores.Value += 100 * player.Properties.Get("combo").Value;
-        player.Timers.Get("combo").Restart(4);
+	if (killed.Team != player.Team) {
+        	player.Properties.Get("combo").Value += 1;
+		++player.Properties.Kills.Value;
+		player.Properties.Get("KD").Value = player.Properties.Deaths.Value > 0 ? Math.round(player.Properties.Kills.Value / player.Properties.Deaths.Value * 100) / 100 : player.Properties.Kills.Value;
+        	player.Properties.Scores.Value += 100 * player.Properties.Get("combo").Value;
+        	player.Timers.Get("combo").Restart(4);
 	}
 });
 
@@ -219,6 +223,31 @@ function SetGameMode()
 	SpawnTeams();
 }
 function SetEndOfMatchMode() {
+	let saved_id_arr = saved_id.split("/");
+	for (indx in saved_id_arr) {
+		for (i in props)
+			Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
+		}
+	}
+
+	let top1_kills = Properties.GetContext().Get("top1_kills"), top1_kd = Properties.GetContext().Get("top1_kd"), top1_scores = Properties.GetContext().Get("top1_scores");
+	function CalculateBest(_value) {
+		let cur_best_id = "", cur_best_value = 0, e = Players.GetEnumerator();
+		while(e.moveNext()) {
+			if (e.Current.Properties.Get(_value).Value > cur_best_value) {
+				cur_best_id = e.Current.Id;
+				cur_best_value = e.Current.Properties.Get(_value).Value;
+			}
+		}
+		return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id) }
+	}
+
+	top1_kills.Value = CalculateBest("Kills");
+	top1_kd.Value = CalculateBest("KD");
+	top1_scores.Value = CalculateBest("Scores");
+
+	msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.value + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.value + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.value, "<B>Игра окончена!\nРезультаты:</B>")
+	
 	stateProp.Value = EndOfMatchStateValue;
 	Ui.GetContext().Hint.Value = "Hint/EndOfMatch";
 

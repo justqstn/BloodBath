@@ -232,6 +232,8 @@ function SetGameMode()
 		inventory.Build.Value = true;
 	}
 
+    let obj = CalculateBest("Kills");
+
 	mainTimer.Restart(GameModeTime);
 	Spawns.GetContext().Despawn();
 	SpawnTeams();

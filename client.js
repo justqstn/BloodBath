@@ -1,21 +1,21 @@
-//var Color = importNamespace('PixelCombats.ScriptingApi.Structures');
-//var System = importNamespace('System');
+//let Color = importNamespace('PixelCombats.ScriptingApi.Structures');
+//let System = importNamespace('System');
 
 // êîíñòàíòû
-var WaitingPlayersTime = 2;
-var BuildBaseTime = 2;
-var GameModeTime = 2;
-var EndOfMatchTime = 20;
+let WaitingPlayersTime = 2;
+let BuildBaseTime = 2;
+let GameModeTime = 2;
+let EndOfMatchTime = 20;
 
 // êîíñòàíòû èìåí
-var WaitingStateValue = "Waiting";
-var BuildModeStateValue = "BuildMode";
-var GameStateValue = "Game";
-var EndOfMatchStateValue = "EndOfMatch";
+let WaitingStateValue = "Waiting";
+let BuildModeStateValue = "BuildMode";
+let GameStateValue = "Game";
+let EndOfMatchStateValue = "EndOfMatch";
 
 // ïîñòîÿííûå ïåðåìåííûå
-var mainTimer = Timers.GetContext().Get("Main");
-var stateProp = Properties.GetContext().Get("State");
+let mainTimer = Timers.GetContext().Get("Main");
+let stateProp = Properties.GetContext().Get("State");
 let saved_id = Properties.GetContext().Get("saved");
 saved_id.Value = "";
 
@@ -35,15 +35,15 @@ Ui.GetContext().MainTimerId.Value = mainTimer.Id;
 // ñîçäàåì êîìàíäû
 Teams.Add("Blue", "<i><B><size=38>С</size><size=30>иние</size></B>\nкровавая баня</i>", { b: 0.75 });
 Teams.Add("Red", "<i><B><size=38>К</size><size=30>расные</size></B>\nкровавая баня</i>", { r: 0.75 });
-var blueTeam = Teams.Get("Blue");
-var redTeam = Teams.Get("Red");
+let blueTeam = Teams.Get("Blue");
+let redTeam = Teams.Get("Red");
 blueTeam.Spawns.SpawnPointsGroups.Add(1);
 redTeam.Spawns.SpawnPointsGroups.Add(2);
 blueTeam.Build.BlocksSet.Value = BuildBlocksSet.Blue;
 redTeam.Build.BlocksSet.Value = BuildBlocksSet.Red;
 
 // çàäàåì ìàêñ ñìåðòåé êîìàíä
-var maxDeaths = Players.MaxCount * 5;
+let maxDeaths = Players.MaxCount * 5;
 Teams.Get("Red").Properties.Get("Deaths").Value = maxDeaths;
 Teams.Get("Blue").Properties.Get("Deaths").Value = maxDeaths;
 // çàäàåì ÷òî âûâîäèòü â ëèäåðáîðäàõ
@@ -108,7 +108,7 @@ Players.OnPlayerDisconnected.Add(function(player) {
 });
 
 // äåëàåì èãðîêîâ íåóÿçâèìûìè ïîñëå ñïàâíà
-var immortalityTimerName="immortality";
+let immortalityTimerName="immortality";
 Spawns.GetContext().OnSpawn.Add(function(player){
 	player.Properties.Immortality.Value=true;
 	timer=player.Timers.Get(immortalityTimerName).Restart(5);
@@ -175,16 +175,18 @@ mainTimer.OnTimer.Add(function() {
 // çàäàåì ïåðâîå èãðîâîå ñîñòîÿíèå
 SetWaitingMode();
 
-function CalculateBest(name, enm) {
-    let cur_id = "";
-    let cur_value = 0;
+function CalculateBest(name) {
+	let enm = Players.GetEnumerator();
+    this.id = "";
+	this.nickname = "";
+	this.score = -1;
     while (enm.moveNext()) {
-        if (Properties.GetContext(enm.Current).Get(name).Value > cur_value) {
-            cur_id = enm.Current.Id;
-            cur_value = Properties.GetContext(enm.Current).Get(name).Value;
+        if (enm.Current.Properties.Get(name).Value > this.score) {
+            this.score = enm.Current.Properties.Get(name).Value
+            this.id = enm.Current.Id;
+			this.nickname = enm.Current.NickName;
         }
     }
-    return {name: Players.Get(cur_id).NickName, score: cur_value};
 }
 
 // ñîñòîÿíèÿ èãðû
@@ -199,7 +201,7 @@ function SetBuildMode()
 {
 	stateProp.Value = BuildModeStateValue;
 	Ui.GetContext().Hint.Value = "Hint/BuildBase";
-	var inventory = Inventory.GetContext();
+	let inventory = Inventory.GetContext();
 	inventory.Main.Value = false;
 	inventory.Secondary.Value = false;
 	inventory.Melee.Value = true;
@@ -215,7 +217,7 @@ function SetGameMode()
 	stateProp.Value = GameStateValue;
 	Ui.GetContext().Hint.Value = "Hint/AttackEnemies";
 
-	var inventory = Inventory.GetContext();
+	let inventory = Inventory.GetContext();
 	if (GameMode.Parameters.GetBool("OnlyKnives")) {
 		inventory.Main.Value = false;
 		inventory.Secondary.Value = false;
@@ -229,8 +231,8 @@ function SetGameMode()
 		inventory.Explosive.Value = true;
 		inventory.Build.Value = true;
 	}
-
-
+	msg.Show(JSON.stringify(new CalculateBest("Kills")));
+	
 	mainTimer.Restart(GameModeTime);
 	Spawns.GetContext().Despawn();
 	SpawnTeams();
@@ -244,14 +246,14 @@ function SetEndOfMatchMode() {
             }
         }
 
-        msg.Show(JSON.stringify(CalculateBest("Kills", Players.GetEnumerator())));
+        msg.Show(JSON.stringify(new CalculateBest("Kills")));
 
         //msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nick + "\n<i>Счет: " + top1_kills.val + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nick + "\n<i>Счет: " + top1_kd.val + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nick + "\n<i>Счет: " + top1_scores.val);
 
         stateProp.Value = EndOfMatchStateValue;
         Ui.GetContext().Hint.Value = "Hint/EndOfMatch";
 
-        var spawns = Spawns.GetContext();
+        let spawns = Spawns.GetContext();
         spawns.enable = false;
         spawns.Despawn();
         Game.GameOver(LeaderBoard.GetTeams());
@@ -263,7 +265,7 @@ function RestartGame() {
 }
 
 function SpawnTeams() {
-	var e = Teams.GetEnumerator();
+	let e = Teams.GetEnumerator();
 	while (e.moveNext()) {
 		Spawns.GetContext(e.Current).Spawn();
 	}

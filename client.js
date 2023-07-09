@@ -2,7 +2,7 @@
 //var System = importNamespace('System');
 
 // êîíñòàíòû
-var WaitingPlayersTime = 3;
+var WaitingPlayersTime = 10;
 var BuildBaseTime = 2;
 var GameModeTime = 2;
 var EndOfMatchTime = 20;
@@ -224,12 +224,7 @@ function SetGameMode()
 }
 function SetEndOfMatchMode() {
     try {
-        let saved_id_arr = saved_id.split("/");
-        for (indx in saved_id_arr) {
-            for (i in props) {
-                Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
-            }
-        }
+        
 
         let top1_kills = Properties.GetContext().Get("top1_kills"), top1_kd = Properties.GetContext().Get("top1_kd"), top1_scores = Properties.GetContext().Get("top1_scores");
         function CalculateBest(_value) {

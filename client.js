@@ -226,10 +226,12 @@ function SetGameMode()
 }
 function SetEndOfMatchMode() {
     try {
-        let saved_id_arr = saved_id.Value.split("/");
-        for (indx in saved_id_arr) {
-            for (i in props) {
-                Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
+        if (saved_id.Value.length > 1) {
+            let saved_id_arr = saved_id.Value.split("/");
+            for (indx in saved_id_arr) {
+                for (i in props) {
+                    Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
+                }
             }
         }
 

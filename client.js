@@ -3,8 +3,8 @@
 
 // êîíñòàíòû
 var WaitingPlayersTime = 10;
-var BuildBaseTime = 30;
-var GameModeTime = 60;
+var BuildBaseTime = 2;
+var GameModeTime = 2;
 var EndOfMatchTime = 20;
 
 // êîíñòàíòû èìåí
@@ -37,6 +37,8 @@ Teams.Add("Blue", "<i><B><size=38>С</size><size=30>иние</size></B>\nкро�
 Teams.Add("Red", "<i><B><size=38>К</size><size=30>расные</size></B>\nкровавая баня</i>", { r: 0.75 });
 var blueTeam = Teams.Get("Blue");
 var redTeam = Teams.Get("Red");
+blueTeam.Spawns.SpawnPointsGroups.Add(1);
+redTeam.Spawns.SpawnPointsGroups.Add(2);
 blueTeam.Build.BlocksSet.Value = BuildBlocksSet.Blue;
 redTeam.Build.BlocksSet.Value = BuildBlocksSet.Red;
 
@@ -175,8 +177,6 @@ SetWaitingMode();
 
 // ñîñòîÿíèÿ èãðû
 function SetWaitingMode() {
-	blueTeam.Spawns.SpawnPointsGroups.Add(1);
-	redTeam.Spawns.SpawnPointsGroups.Add(2);
 	stateProp.Value = WaitingStateValue;
 	Ui.GetContext().Hint.Value = "Hint/WaitingPlayers";
 	Spawns.GetContext().enable = false;
@@ -223,39 +223,41 @@ function SetGameMode()
 	SpawnTeams();
 }
 function SetEndOfMatchMode() {
-	let saved_id_arr = saved_id.split("/");
-	for (indx in saved_id_arr) {
-		for (i in props) {
-			Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
-		}
-	}
+    try {
+        let saved_id_arr = saved_id.split("/");
+        for (indx in saved_id_arr) {
+            for (i in props) {
+                Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
+            }
+        }
 
-	let top1_kills = Properties.GetContext().Get("top1_kills"), top1_kd = Properties.GetContext().Get("top1_kd"), top1_scores = Properties.GetContext().Get("top1_scores");
-	function CalculateBest(_value) {
-		let cur_best_id = "", cur_best_value = 0, e = Players.GetEnumerator();
-		while(e.moveNext()) {
-			if (e.Current.Properties.Get(_value).Value > cur_best_value) {
-				cur_best_id = e.Current.Id;
-				cur_best_value = e.Current.Properties.Get(_value).Value;
-			}
-		}
-		return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id) };
-    }
+        let top1_kills = Properties.GetContext().Get("top1_kills"), top1_kd = Properties.GetContext().Get("top1_kd"), top1_scores = Properties.GetContext().Get("top1_scores");
+        function CalculateBest(_value) {
+            let cur_best_id = "", cur_best_value = 0, e = Players.GetEnumerator();
+            while (e.moveNext()) {
+                if (e.Current.Properties.Get(_value).Value > cur_best_value) {
+                    cur_best_id = e.Current.Id;
+                    cur_best_value = e.Current.Properties.Get(_value).Value;
+                }
+            }
+            return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id) };
+        }
 
-	top1_kills.Value = CalculateBest("Kills");
-	top1_kd.Value = CalculateBest("KD");
-	top1_scores.Value = CalculateBest("Scores");
+        top1_kills.Value = CalculateBest("Kills");
+        top1_kd.Value = CalculateBest("KD");
+        top1_scores.Value = CalculateBest("Scores");
 
-	msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.value + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.value + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.value, "<B>Игра окончена!\nРезультаты:</B>")
-	
-	stateProp.Value = EndOfMatchStateValue;
-	Ui.GetContext().Hint.Value = "Hint/EndOfMatch";
+        msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.value + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.value + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.value, "<B>Игра окончена!\nРезультаты:</B>")
 
-	var spawns = Spawns.GetContext();
-	spawns.enable = false;
-	spawns.Despawn();
-	Game.GameOver(LeaderBoard.GetTeams());
-	mainTimer.Restart(EndOfMatchTime);
+        stateProp.Value = EndOfMatchStateValue;
+        Ui.GetContext().Hint.Value = "Hint/EndOfMatch";
+
+        var spawns = Spawns.GetContext();
+        spawns.enable = false;
+        spawns.Despawn();
+        Game.GameOver(LeaderBoard.GetTeams());
+        mainTimer.Restart(EndOfMatchTime);
+    } catch(e) { msg.Show(e.name + " " + e.message); }
 }
 function RestartGame() {
 	Game.RestartGame();

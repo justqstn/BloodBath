@@ -174,6 +174,7 @@ mainTimer.OnTimer.Add(function() {
 
 function CalculateBest(_value) {
     try {
+        let e = Players.GetEnumerator();
         let cur_best_id = "", cur_best_value = 0;
         while (e.moveNext()) {
             if (e.Current.Properties.Get(_value).Value > cur_best_value) {
@@ -243,7 +244,6 @@ function SetEndOfMatchMode() {
                 Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
             }
         }
-        let e = Players.GetEnumerator();
         let top1_kills, top1_kd, top1_scores;
 
         top1_kills = CalculateBest("Kills");

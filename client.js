@@ -226,14 +226,7 @@ function SetGameMode()
 }
 function SetEndOfMatchMode() {
     try {
-        if (saved_id.Value.length > 1) {
-            let saved_id_arr = saved_id.Value.split("/");
-            for (indx in saved_id_arr) {
-                for (i in props) {
-                    Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
-                }
-            }
-        }
+        
 
         //msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nick + "\n<i>Счет: " + top1_kills.val + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nick + "\n<i>Счет: " + top1_kd.val + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nick + "\n<i>Счет: " + top1_scores.val);
 

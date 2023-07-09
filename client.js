@@ -224,7 +224,12 @@ function SetGameMode()
 }
 function SetEndOfMatchMode() {
     try {
-        
+        let saved_id_arr = saved_id.split("/");
+        for (indx in saved_id_arr) {
+            for (i in props) {
+                Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
+            }
+        }
 
         let top1_kills = Properties.GetContext().Get("top1_kills"), top1_kd = Properties.GetContext().Get("top1_kd"), top1_scores = Properties.GetContext().Get("top1_scores");
         function CalculateBest(_value) {
@@ -242,7 +247,7 @@ function SetEndOfMatchMode() {
         top1_kd.Value = CalculateBest("KD");
         top1_scores.Value = CalculateBest("Scores");
 
-        msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.value + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.value + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.value, "<B>Игра окончена!\nРезультаты:</B>")
+        msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.value + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.value + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.value);
 
         stateProp.Value = EndOfMatchStateValue;
         Ui.GetContext().Hint.Value = "Hint/EndOfMatch";

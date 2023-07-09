@@ -175,6 +175,18 @@ mainTimer.OnTimer.Add(function() {
 // çàäàåì ïåðâîå èãðîâîå ñîñòîÿíèå
 SetWaitingMode();
 
+function CalculateBest(name, enm) {
+    let cur_id = "";
+    let cur_value = 0;
+    while (enm.moveNext()) {
+        if (enm.Current.Properties.Get(name).Value > cur_value) {
+            cur_id = enm.Current.Id;
+            cur_value = enm.Current.Properties.Get(name).Value;
+        }
+    }
+    return {name: Players.Get(cur_id).NickName, score: cur_value};
+}
+
 // ñîñòîÿíèÿ èãðû
 function SetWaitingMode() {
 	stateProp.Value = WaitingStateValue;
@@ -231,6 +243,8 @@ function SetEndOfMatchMode() {
                 Properties.GetContext().Get(props[i] + saved_id_arr[indx]).Value = null;
             }
         }
+
+        msg.Show(JSON.stringify(CalculateBest("Kills", Players.GetEnumerator)));
 
         //msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nick + "\n<i>Счет: " + top1_kills.val + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nick + "\n<i>Счет: " + top1_kd.val + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nick + "\n<i>Счет: " + top1_scores.val);
 

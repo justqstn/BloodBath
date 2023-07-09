@@ -2,7 +2,7 @@
 //var System = importNamespace('System');
 
 // êîíñòàíòû
-var WaitingPlayersTime = 10;
+var WaitingPlayersTime = 3;
 var BuildBaseTime = 2;
 var GameModeTime = 2;
 var EndOfMatchTime = 20;
@@ -240,7 +240,7 @@ function SetEndOfMatchMode() {
                     cur_best_value = e.Current.Properties.Get(_value).Value;
                 }
             }
-            return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id) };
+            return { id: cur_best_id, value: cur_best_value, nickname: Players.Get(cur_best_id).NickName };
         }
 
         top1_kills.Value = CalculateBest("Kills");

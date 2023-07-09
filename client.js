@@ -231,7 +231,7 @@ function SetEndOfMatchMode() {
             }
         }
 
-        let top1_kills = Properties.GetContext().Get("top1_kills"), top1_kd = Properties.GetContext().Get("top1_kd"), top1_scores = Properties.GetContext().Get("top1_scores");
+        let top1_kills, top1_kd, top1_scores;
         function CalculateBest(_value) {
             try {
                 let cur_best_id = "", cur_best_value = 0, e = Players.GetEnumerator();
@@ -245,9 +245,9 @@ function SetEndOfMatchMode() {
             } catch (e) { msg.Show(e.name + " " + e.message); }
         }
 
-        top1_kills.Value = CalculateBest("Kills");
-        top1_kd.Value = CalculateBest("KD");
-        top1_scores.Value = CalculateBest("Scores");
+        top1_kills = CalculateBest("Kills");
+        top1_kd = CalculateBest("KD");
+        top1_scores = CalculateBest("Scores");
 
         msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.value + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.value + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.value);
 

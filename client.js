@@ -172,17 +172,16 @@ mainTimer.OnTimer.Add(function() {
 	}
 });
 
-function CalculateBest(_value) {
+function CalculateBest(_name) {
+    let name = _name;
     let e = Players.GetEnumerator();
     let cur_best_id = "", cur_best_value = 0;
     while (e.moveNext()) {
-        if (e.Current.Properties.Get(_value).Value > cur_best_value) {
+        if (e.Current.Properties.Get(name).Value > cur_best_value) {
             cur_best_id = e.Current.Id;
-            cur_best_value = e.Current.Properties.Get(_value).Value;
+            cur_best_value = e.Current.Properties.Get(name).Value;
         }
     }
-
-    msg.Show(JSON.stringify({ id: cur_best_id, val: cur_best_value, nick: Players.Get(cur_best_id).NickName }));
     return { id: cur_best_id, val: cur_best_value, nick: Players.Get(cur_best_id).NickName };
 }
 

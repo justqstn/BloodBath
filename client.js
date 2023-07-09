@@ -249,7 +249,7 @@ function SetEndOfMatchMode() {
 		let top1_kd = new CalculateBest("KD");
 		let top1_scores = new CalculateBest("Scores")
 
-        msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.score + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.score + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.score);
+        msg.Show("<B>Топ-1 по убийствам:</B> " + top1_kills.nickname + "\n<i>Счет: " + top1_kills.score + "</i>\n\n\n<B>Топ-1 по K/D:</B> " + top1_kd.nickname + "\n<i>Счет: " + top1_kd.score + "</i>\n\n\n<B>Топ-1 по очкам:</B> " + top1_scores.nickname + "\n<i>Счет: " + top1_scores.score + "</i>", "<B>Игра окончена!</B>");
 
         stateProp.Value = EndOfMatchStateValue;
         Ui.GetContext().Hint.Value = "Hint/EndOfMatch";

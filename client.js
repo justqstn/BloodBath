@@ -2,9 +2,9 @@
 //let System = importNamespace('System');
 
 // êîíñòàíòû
-let WaitingPlayersTime = 2;
-let BuildBaseTime = 2;
-let GameModeTime = 2;
+let WaitingPlayersTime = 10;
+let BuildBaseTime = 30;
+let GameModeTime = 600;
 let EndOfMatchTime = 20;
 
 // êîíñòàíòû èìåí

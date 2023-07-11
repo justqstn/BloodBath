@@ -105,6 +105,7 @@ Teams.OnRequestJoinTeam.Add(function (player, team) {
 Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
 Players.OnPlayerDisconnected.Add(function (player) {
+	Ui.GetContext().Hint.Value = "Load: " + Properties.GetContext().Get("KD" + player.Id).Value + "\nSave: " + player.Properties.Scores.Value + "\nSavedids:" + saved_id.Value;
 	Properties.GetContext().Get("Scores" + player.Id).Value = player.Properties.Scores.Value;
 	Properties.GetContext().Get("Deaths" + player.Id).Value = player.Properties.Deaths.Value;
 	Properties.GetContext().Get("Kills" + player.Id).Value = player.Properties.Kills.Value;

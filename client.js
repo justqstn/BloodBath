@@ -91,12 +91,12 @@ Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: "Deaths" };
 const props = ["Kills", "Deaths", "Scores", "KD"];
 Teams.OnRequestJoinTeam.Add(function (player, team) {
 	player.Properties.Get("KD").Value = Properties.GetContext().Get("KD" + player.Id).Value || 0;
-	Properties.GetContext().Get("KD" + player.Id).Value = null;
 	player.Properties.Kills.Value = Properties.GetContext().Get("Kills" + player.Id).Value || 0;
-	Properties.GetContext().Get("Kills" + player.Id).Value = null;
 	player.Properties.Deaths.Value = Properties.GetContext().Get("Deaths" + player.Id).Value || 0;
-	Properties.GetContext().Get("Deaths" + player.Id).Value = null;
 	player.Properties.Scores.Value = Properties.GetContext().Get("Scores" + player.Id).Value || 0;
+	Properties.GetContext().Get("KD" + player.Id).Value = null;
+	Properties.GetContext().Get("Kills" + player.Id).Value = null;
+	Properties.GetContext().Get("Deaths" + player.Id).Value = null;
 	Properties.GetContext().Get("Scores" + player.Id).Value = null;
 	saved_id.Value.replace(player.Id + "/", "");
 	team.Add(player);

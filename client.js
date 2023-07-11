@@ -90,15 +90,17 @@ Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: "Deaths" };
 // ðàçðåøàåì âõîä â êîìàíäû ïî çàïðîñó
 const props = ["Kills", "Deaths", "Scores", "KD"];
 Teams.OnRequestJoinTeam.Add(function (player, team) {
-	player.Properties.Get("KD").Value = Properties.GetContext().Get("KD" + player.Id).Value || 0;
-	player.Properties.Kills.Value = Properties.GetContext().Get("Kills" + player.Id).Value || 0;
-	player.Properties.Deaths.Value = Properties.GetContext().Get("Deaths" + player.Id).Value || 0;
-	player.Properties.Scores.Value = Properties.GetContext().Get("Scores" + player.Id).Value || 0;
-	Properties.GetContext().Get("KD" + player.Id).Value = null;
-	Properties.GetContext().Get("Kills" + player.Id).Value = null;
-	Properties.GetContext().Get("Deaths" + player.Id).Value = null;
-	Properties.GetContext().Get("Scores" + player.Id).Value = null;
-	saved_id.Value.replace(player.Id + "/", "");
+    if (player.Team == null) {
+        player.Properties.Get("KD").Value = Properties.GetContext().Get("KD" + player.Id).Value || 0;
+        player.Properties.Kills.Value = Properties.GetContext().Get("Kills" + player.Id).Value || 0;
+        player.Properties.Deaths.Value = Properties.GetContext().Get("Deaths" + player.Id).Value || 0;
+        player.Properties.Scores.Value = Properties.GetContext().Get("Scores" + player.Id).Value || 0;
+        Properties.GetContext().Get("KD" + player.Id).Value = null;
+        Properties.GetContext().Get("Kills" + player.Id).Value = null;
+        Properties.GetContext().Get("Deaths" + player.Id).Value = null;
+        Properties.GetContext().Get("Scores" + player.Id).Value = null;
+    }
+    saved_id.Value = saved_id.Value.replace(player.Id + "/", "");
 	team.Add(player);
 });
 // ñïàâí ïî âõîäó â êîìàíäó
@@ -110,7 +112,6 @@ Players.OnPlayerDisconnected.Add(function (player) {
 	Properties.GetContext().Get("Kills" + player.Id).Value = player.Properties.Kills.Value;
 	Properties.GetContext().Get("KD" + player.Id).Value = player.Properties.Get("KD").Value;
 	saved_id.Value += player.Id + "/";
-	Ui.GetContext().Hint.Value = player.NickName + "Вышел\n" + "Load: " + Properties.GetContext().Get("KD" + player.Id).Value + "\nSave: " + player.Properties.Scores.Value + "\nSavedids:" + saved_id.Value;
 });
 
 // äåëàåì èãðîêîâ íåóÿçâèìûìè ïîñëå ñïàâíà

@@ -105,12 +105,12 @@ Teams.OnRequestJoinTeam.Add(function (player, team) {
 Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
 Players.OnPlayerDisconnected.Add(function (player) {
-	Ui.GetContext().Hint.Value = "Load: " + Properties.GetContext().Get("KD" + player.Id).Value + "\nSave: " + player.Properties.Scores.Value + "\nSavedids:" + saved_id.Value;
 	Properties.GetContext().Get("Scores" + player.Id).Value = player.Properties.Scores.Value;
 	Properties.GetContext().Get("Deaths" + player.Id).Value = player.Properties.Deaths.Value;
 	Properties.GetContext().Get("Kills" + player.Id).Value = player.Properties.Kills.Value;
 	Properties.GetContext().Get("KD" + player.Id).Value = player.Properties.Get("KD").Value;
 	saved_id.Value += player.Id + "/";
+	Ui.GetContext().Hint.Value = player.NickName + "Вышел\n" + Load: " + Properties.GetContext().Get("KD" + player.Id).Value + "\nSave: " + player.Properties.Scores.Value + "\nSavedids:" + saved_id.Value;
 });
 
 // äåëàåì èãðîêîâ íåóÿçâèìûìè ïîñëå ñïàâíà

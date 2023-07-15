@@ -91,19 +91,19 @@ Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: "Deaths" };
 const props = ["Kills", "Deaths", "Scores", "KD"];
 Teams.OnRequestJoinTeam.Add(function (player, team) {
 	team.Add(player);
-    if (player.Team == null) {
+	if (player.Team == null) {
 		saved_id.Value = saved_id.Value.replace(player.Id + "/", "");
-		props.forEach(function(prop) {
+		props.forEach(function (prop) {
 			player.Properties.Get(prop).Value = Properties.GetContext().Get(prop + player.Id).Value || 0;
 			Properties.GetContext().Get(prop + player.Id).Value = null;
 		});
-    }
+	}
 });
 // ñïàâí ïî âõîäó â êîìàíäó
 Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
-Players.OnPlayerDisconnected.Add(function (player) {\
-	props.forEach(function(prop) {
+Players.OnPlayerDisconnected.Add(function (player) {
+	props.forEach(function (prop) {
 		Properties.GetContext().Get(prop + player.Id).Value = player.Properties.Get(prop).Value;
 	});
 	saved_id.Value += player.Id + "/";

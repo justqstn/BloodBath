@@ -1,5 +1,5 @@
 //let Color = importNamespace('PixelCombats.ScriptingApi.Structures');
-//let System = importNamespace('System');
+//let System = importNamespace('System';
 
 // êîíñòàíòû
 let WaitingPlayersTime = 10;
